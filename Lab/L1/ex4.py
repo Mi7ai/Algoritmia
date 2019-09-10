@@ -4,7 +4,7 @@ def myfunction(a, b):
 
 
 x = 1
-y = [2,1]
+y = [2, 1]
 
 myfunction(x, y)
 print(x, y)
