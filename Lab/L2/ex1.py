@@ -16,20 +16,11 @@ class Estudiante:
         return self.dic.get(asig)
 
     def media(self):
-        if len(self.dic) == 0:
-            return None
-
-        suma: int = 0
-
-        for item in self.dic.values():
-            suma += item
-        return suma/len(self.dic)
-
-        '''
-        
         n = len(self.dic)
+        l = sum(self.dic.values())
+        s = l/n
         return sum(self.dic.values()) / n if n != 0 else None
-        '''
+
 
     def muestra_expediente(self):
         for key, item in self.dic.items():
