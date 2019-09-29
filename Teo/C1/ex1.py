@@ -5,7 +5,7 @@ from Lab.labyrinthviewer import LabyrinthViewer
 from algoritmia.datastructures.queues import Fifo
 
 __author__ = "Mihai"
-__status__ = "Pending"
+__status__ = "Finished"
 
 # primero en anchura. Algoritmo no recursivo + cola FIFO
 
