@@ -7,7 +7,7 @@ from algoritmia.datastructures.queues import Fifo
 __author__ = "Mihai"
 __status__ = "Finished"
 
-# primero en anchura. Algoritmo no recursivo + cola FIFO
+# BUSCAR TESORO EN ANCHURA
 
 
 def create_labyrinth(rows, cols):
@@ -47,6 +47,7 @@ def create_labyrinth(rows, cols):
 	return UndirectedGraph(E=corridors)
 
 
+# Busca el tesoro y devuelve una tupla (x, y), o None si no lo encuentra
 def busca_tesoro_primero_anchura(lab, v_inicio):
 	# creamos cola y set
 	q = Fifo()

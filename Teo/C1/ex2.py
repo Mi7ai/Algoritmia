@@ -8,7 +8,7 @@ __author__ = "Mihai"
 __status__ = "Finished"
 
 
-# primero en anchura. Algoritmo no recursivo + cola FIFO
+# BUSCAR TESORO EN PROFUNDIDAD RECURSIVO
 
 
 def create_labyrinth(rows, cols):
@@ -48,7 +48,7 @@ def create_labyrinth(rows, cols):
 	return UndirectedGraph(E=corridors)
 
 
-# recursiva
+# Busca el tesoro y devuelve una tupla (x, y), o None si no lo encuentra
 def busca_tesoro_primero_profundidad(lab, v_inicio):
 	def explorar_desde(v):
 		seen.add(v)
