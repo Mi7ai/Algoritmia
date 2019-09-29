@@ -72,13 +72,31 @@ def recorredor_vertices_anchura(lab, v_inicio):
 	seen = set()
 	return recorrer_desde(v_inicio)
 
+# LISTA DE VERTICES EN PROFUNDIDAD
+
+def recorredor_vertices_profundidad(lab, v_inicio):
+	def recorrer_desde(v):
+		# añadir a la lista de vertices
+		# mirar sus vecinos para añadirlos tambien
+		seen.add(v)
+		vertices.append(v)
+		for suc in lab.succs(v):
+			if suc not in seen:
+				recorrer_desde(suc)
+
+	vertices = []
+	seen = set()
+	recorrer_desde(v_inicio)
+	return vertices
+
 
 if __name__ == '__main__':
 	lab = create_labyrinth(2, 2)
 	# LabyrinthViewer(lab, canvas_width=600, canvas_height=400, margin=10).run()
 	v_inicio = (0, 0)
 
-	vertices = recorredor_vertices_anchura(lab, v_inicio)
+	# vertices = recorredor_vertices_anchura(lab, v_inicio)
+	vertices = recorredor_vertices_profundidad(lab, v_inicio)
 
 	for v in vertices:
 		print(v)

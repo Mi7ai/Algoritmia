@@ -55,7 +55,7 @@ def recorredor_vertices_anchura(lab, v_inicio):
 		seen.add(v)
 
 		# recorrer la cola, sacar el 1 valor
-		# añadirl a la lista de aristas
+		# añadir a la lista de aristas
 		# mirar sus vecinos para añadirlos tambien
 
 		while len(q) > 0:
@@ -73,12 +73,32 @@ def recorredor_vertices_anchura(lab, v_inicio):
 	return recorrer_desde(v_inicio, v_inicio)
 
 
+# LISTA DE ARISTAS EN PROFUNDIDAD
+
+def recorredor_vertices_profundidad(lab, v_inicio):
+	def recorrer_desde(u, v):
+
+		# recorrer la cola, sacar el 1 valor
+		# añadir a la lista de aristas
+		# mirar sus vecinos para añadirlos tambien
+		seen.add(v)
+		aristas.append((u, v))
+		for suc in lab.succs(v):
+			if suc not in seen:
+				recorrer_desde(v, suc)
+
+	aristas = []
+	seen = set()
+	recorrer_desde(v_inicio, v_inicio)
+	return aristas
+
 if __name__ == '__main__':
 	lab = create_labyrinth(2, 2)
 	# LabyrinthViewer(lab, canvas_width=600, canvas_height=400, margin=10).run()
 	v_inicio = (0, 0)
 
-	aristas = recorredor_vertices_anchura(lab, v_inicio)
+	# aristas = recorredor_vertices_anchura(lab, v_inicio)
+	aristas = recorredor_vertices_profundidad(lab, v_inicio)
 
 	for a in aristas:
 		print(a)
