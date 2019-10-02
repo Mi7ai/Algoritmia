@@ -8,8 +8,6 @@ __author__ = "Mihai"
 __status__ = "Finished"
 
 
-# LISTA DE VERTICES EN ANCHURA
-
 def create_labyrinth(rows, cols):
 	# general expressions of all vertexes
 	vertices = [(row, col) for row in range(rows) for col in range(cols)]
@@ -47,40 +45,41 @@ def create_labyrinth(rows, cols):
 	return UndirectedGraph(E=corridors)
 
 
-# devolver una lista con los todos los vértices del grafo en el orden
-# en el que los hemos visitado
+# LISTA DE VERTICES EN ANCHURA
+
+# devolver una lista con los todos los vértices del grafo en el orden en el que los hemos visitado
 def recorredor_vertices_anchura(lab, v_inicio):
-	def recorrer_desde(v):
-		q.push(v)
-		seen.add(v)
+	def recorrer_desde(v_ini):
+		q.push(v_ini)
+		seen.add(v_ini)
 
 		# recorrer la cola, sacar el 1 valor
-		# añadirl a la lista de vertices
+		# añadirlo a la lista de vertices
 		# mirar sus vecinos para añadirlos tambien
 
 		while len(q) > 0:
-			v = q.pop()
-			vertices.append(v)
-			for suc in lab.succs(v):
+			v_ini = q.pop()
+			vertices.append(v_ini)
+			for suc in lab.succs(v_ini):
 				if suc not in seen:
 					seen.add(suc)
 					q.push(suc)
-		return vertices
 
 	vertices = []
 	q = Fifo()
 	seen = set()
-	return recorrer_desde(v_inicio)
+	recorrer_desde(v_inicio)
+	return vertices
 
 # LISTA DE VERTICES EN PROFUNDIDAD
 
 def recorredor_vertices_profundidad(lab, v_inicio):
-	def recorrer_desde(v):
+	def recorrer_desde(v_ini):
 		# añadir a la lista de vertices
 		# mirar sus vecinos para añadirlos tambien
-		seen.add(v)
-		vertices.append(v)
-		for suc in lab.succs(v):
+		seen.add(v_ini)
+		vertices.append(v_ini)
+		for suc in lab.succs(v_ini):
 			if suc not in seen:
 				recorrer_desde(suc)
 
@@ -91,12 +90,13 @@ def recorredor_vertices_profundidad(lab, v_inicio):
 
 
 if __name__ == '__main__':
-	lab = create_labyrinth(2, 2)
+	rows, cols = 2, 2
+	lab = create_labyrinth(rows, cols)
 	# LabyrinthViewer(lab, canvas_width=600, canvas_height=400, margin=10).run()
 	v_inicio = (0, 0)
 
-	# vertices = recorredor_vertices_anchura(lab, v_inicio)
-	vertices = recorredor_vertices_profundidad(lab, v_inicio)
+	lista_vertices = recorredor_vertices_anchura(lab, v_inicio)
+	# lista_vertices = recorredor_vertices_profundidad(lab, v_inicio)
 
-	for v in vertices:
+	for v in lista_vertices:
 		print(v)

@@ -75,7 +75,8 @@ def busca_tesoro_primero_anchura(lab, v_inicio):
 
 
 if __name__ == '__main__':
-	lab = create_labyrinth(20, 25)
+	rows, cols = 20, 25
+	lab = create_labyrinth(rows, cols)
 	# LabyrinthViewer(lab, canvas_width=600, canvas_height=400, margin=10).run()
 
 	v_inicio = (0, 0)

@@ -7,7 +7,7 @@ from algoritmia.datastructures.queues import Fifo
 __author__ = "Mihai"
 __status__ = "Finished"
 
-# LISTA DE ARISTAS EN ANCHURA
+
 
 
 def create_labyrinth(rows, cols):
@@ -47,16 +47,17 @@ def create_labyrinth(rows, cols):
 	return UndirectedGraph(E=corridors)
 
 
-# devolver una lista de aristas con las aristas que hemos utilizado
-# para hacer el recorrido de vértices
-def recorredor_vertices_anchura(lab, v_inicio):
+# LISTA DE ARISTAS EN ANCHURA
+
+# devolver una lista de aristas con las aristas que hemos utilizado para hacer el recorrido de vértices
+def recorredor_aristas_anchura(lab, v_inicio):
 	def recorrer_desde(u, v):
 		q.push((u, v))
 		seen.add(v)
 
-		# recorrer la cola, sacar el 1 valor
-		# añadir a la lista de aristas
-		# mirar sus vecinos para añadirlos tambien
+		# recorrer la cola, sacar la 1 arista
+		# añadirla a la lista de aristas
+		# mirar sus vecinos para añadir las siguientes
 
 		while len(q) > 0:
 			u, v = q.pop()
@@ -65,22 +66,21 @@ def recorredor_vertices_anchura(lab, v_inicio):
 				if suc not in seen:
 					seen.add(suc)
 					q.push((v, suc))
-		return aristas
 
 	aristas = []
 	q = Fifo()
 	seen = set()
-	return recorrer_desde(v_inicio, v_inicio)
-
+	recorrer_desde(v_inicio, v_inicio)
+	return aristas
 
 # LISTA DE ARISTAS EN PROFUNDIDAD
 
 def recorredor_aristas_profundidad(lab, v_inicio):
 	def recorrer_desde(u, v):
 
-		# recorrer la cola, sacar el 1 valor
 		# añadir a la lista de aristas
-		# mirar sus vecinos para añadirlos tambien
+		# mirar sus vecinos para las añadir siguientes
+
 		seen.add(v)
 		aristas.append((u, v))
 		for suc in lab.succs(v):
@@ -93,12 +93,13 @@ def recorredor_aristas_profundidad(lab, v_inicio):
 	return aristas
 
 if __name__ == '__main__':
-	lab = create_labyrinth(2, 2)
+	rows, cols = 2, 2
+	lab = create_labyrinth(rows, cols)
 	# LabyrinthViewer(lab, canvas_width=600, canvas_height=400, margin=10).run()
 	v_inicio = (0, 0)
 
-	# aristas = recorredor_vertices_anchura(lab, v_inicio)
-	aristas = recorredor_aristas_profundidad(lab, v_inicio)
+	lista_aristas = recorredor_aristas_anchura(lab, v_inicio)
+	lista_aristas = recorredor_aristas_profundidad(lab, v_inicio)
 
-	for a in aristas:
+	for a in lista_aristas:
 		print(a)
