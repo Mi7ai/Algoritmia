@@ -1,8 +1,6 @@
 from algoritmia.datastructures.digraphs import UndirectedGraph
 from algoritmia.datastructures.mergefindsets import MergeFindSet
 from random import shuffle
-from Lab.labyrinthviewer import LabyrinthViewer
-from algoritmia.datastructures.queues import Fifo
 
 __author__ = "Mihai"
 __status__ = "Finished"

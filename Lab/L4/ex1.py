@@ -1,6 +1,6 @@
 from algoritmia.datastructures.mergefindsets import MergeFindSet
 from algoritmia.datastructures.digraphs import UndirectedGraph
-from Lab.labyrinthviewer import LabyrinthViewer
+from Utils.labyrinthviewer import LabyrinthViewer
 from algoritmia.datastructures.queues import Fifo
 
 from random import shuffle
