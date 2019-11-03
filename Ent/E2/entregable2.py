@@ -101,6 +101,7 @@ def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
 
 
 def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
+    pass
     # set_vectores_ordenados =
     lista_colores = colorea(UndirectedGraph(V=g.V, E=g.E))
 
