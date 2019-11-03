@@ -45,7 +45,7 @@ def lista_vecinos(g: UndirectedGraph):
 # devuelve una lista decreciente ordenada por longitud de vecinos de los vertices, coordenada x, coordenada y
 
 
-def lista_vecinos2(g: UndirectedGraph):
+def vertices_ordenados(g: UndirectedGraph):
     # s1 = sorted(g.V, key=lambda i: (-len(g.succs(i))))   # orden por la longitud de vecinos de los vertices decreciente
     # s2 = sorted(g.V, key=lambda i: -i[0])  # orden por la coordenada x de los vertices decreciente
     # s3 = sorted(g.V, key=lambda i: -i[1])  # orden por la coordenada y de los vertices decreciente
@@ -88,25 +88,42 @@ def colorea(G: UndirectedGraph):
     return res
 
 
-def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int,int],int]]:
-    lista = lista_vecinos2(g)
-    vertices_ordenados = []
-    for i in lista:
-        vertices_ordenados.append((i[0], i[1]))
-    lista_colores = colorea(UndirectedGraph(V=vertices_ordenados, E=g.E))
+def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
+    lista_colores = colorea(UndirectedGraph(V=vertices_ordenados(g), E=g.E))
     n_colores = 0
     color_dic = {}
+
     for conjunto in lista_colores:
         for gr in conjunto:
             color_dic[gr] = n_colores
         n_colores += 1
-    return len(lista_colores),color_dic #cantidad colores y diccionario de colores
+    return len(lista_colores), color_dic #cantidad colores y diccionario de colores
 
 
 def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
-    pass
+    # set_vectores_ordenados =
+    lista_colores = colorea(UndirectedGraph(V=g.V, E=g.E))
+
+    n_colores = 0
+    color_dic = {}
+
+    for conjunto in lista_colores:
+        for gr in conjunto:
+            color_dic[gr] = n_colores
+        n_colores += 1
+
     # TODO
 
+# devuelve una lista ordenada por el valor de la coordenada x
+# y en caso de empate ordenada por la coordenada y
+
+
+def preatty_print(d: dict):
+    temp_list = []
+    for v, c in d.items():
+        temp_list.append((v[0], v[1], c))
+
+    return sorted(temp_list, key=lambda i: (i[0], i[1]))
 
 
 if __name__ == '__main__':
@@ -118,13 +135,11 @@ if __name__ == '__main__':
 
     if parametros == 3 and sys.argv[2] == "-1":
         # usamos el algoritmo1
-        tup = algoritmo1(g)
-        cant_color = tup[0]
-        dic = tup[1]
+        cant_color, dic_vertices_colores = algoritmo1(g)
 
         print(cant_color)
-        for t, c in dic.items():
-            print(t[0], t[1], c)
+        for elem in preatty_print(dic_vertices_colores):
+            print(elem[0], elem[1], elem[2])
 
     elif parametros == 3 and sys.argv[2] == "-2":
         # usamos el algoritmo2
