@@ -1,19 +1,16 @@
-from Utils.graphcoloring2dviewer import GraphColoring2DViewer
-from algoritmia.datastructures.digraphs import UndirectedGraph
-from typing import Tuple, Dict
 import sys
+from typing import Tuple, Dict
 
-__author__ = "Mihai Manea"
-__status__ = "Pending"
+from algoritmia.datastructures.digraphs import UndirectedGraph
+
+from Utils.graphcoloring2dviewer import GraphColoring2DViewer
 
 filename = sys.argv[1]
+# vertices = []
 
-vertices = []
 
-
-def load_aristas (filename):
+def aristas (filename):
     datos = []
-
     try:
         f = open(filename, "r")
 
@@ -23,10 +20,10 @@ def load_aristas (filename):
             vertice2 = (int(x2), int(y2))
             arista = (vertice1, vertice2)
 
-            vertices.append(vertice1)
-            vertices.append(vertice2)
-
+            # vertices.append(vertice1)
+            # vertices.append(vertice2)
             datos.append(arista)
+
         f.close()
     except IOError:
         print("File cannot be open!")
@@ -34,52 +31,115 @@ def load_aristas (filename):
     return datos
 
 
-def colorea(g: UndirectedGraph):
-    V = set(g.V)
+def lista_vecinos(g: UndirectedGraph):
+    V = g.V
+    lista_vertices = []
+    for v in V:
+        vecinos = int (len(g.succs(v)))
+        x = (v[0])
+        y = (v[1])
+        lista_vertices.append((vecinos, x, y))
+    return sorted(lista_vertices, key=lambda i:(-i[0],-i[1],-i[2]))
 
+
+# devuelve una lista decreciente ordenada por longitud de vecinos de los vertices, coordenada x, coordenada y
+
+
+def lista_vecinos2(g: UndirectedGraph):
+    # s1 = sorted(g.V, key=lambda i: (-len(g.succs(i))))   # orden por la longitud de vecinos de los vertices decreciente
+    # s2 = sorted(g.V, key=lambda i: -i[0])  # orden por la coordenada x de los vertices decreciente
+    # s3 = sorted(g.V, key=lambda i: -i[1])  # orden por la coordenada y de los vertices decreciente
+
+    # print("s1:", s1)
+    # print("s2:", s2)
+    # print("s3:", s3)
+
+    # ordenacion decrediente porlongitud de los vecinos de los vertice,
+    # luego por valor de coordenada x
+    # luego por valor de coordenada y
+    s = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
+    # print("s:", s)
+    return list(s)
+
+# muestra todos los vertices con su nr de vecinos
+
+
+def vecinosV(g: UndirectedGraph):
+    for e in g.V:
+        print("Vertice: {}, nr vecinos = {}".format(e, len(g.succs(e))))
+
+
+def colorea(G: UndirectedGraph):
+    # crea copia de los vertices
+    V = set(G.V)
+
+    # lista con los grupos de vértices del mismo color
     res = []
     while len(V) > 0:
+        # nuevo grupo vacío
         grupo = set()
+        # añade los vértices cuyos sucesores no estén ya en grupo
         for v in V:
-            if all(v not in g.succs(u) for u in grupo):
+            if all(v not in G.succs(u) for u in grupo):
                 grupo.add(v)
+        # mantiene los elementos que estan en V pero no es grupo
         V -= grupo
         res.append(grupo)
     return res
 
 
-def algoritmo1(g: UndirectedGraph):
+def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int,int],int]]:
+    lista = lista_vecinos2(g)
+    vertices_ordenados = []
+    for i in lista:
+        vertices_ordenados.append((i[0], i[1]))
+    lista_colores = colorea(UndirectedGraph(V=vertices_ordenados, E=g.E))
+    n_colores = 0
+    color_dic = {}
+    for conjunto in lista_colores:
+        for gr in conjunto:
+            color_dic[gr] = n_colores
+        n_colores += 1
+    return len(lista_colores),color_dic #cantidad colores y diccionario de colores
 
-    indices_ordenados = sorted(range(len(g.V)), key=lambda i: len(g.V.succs(i)))
 
-    return indices_ordenados
-
-
-
-# def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
-
+def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
+    pass
+    # TODO
 
 
 
 if __name__ == '__main__':
     parametros = len(sys.argv)
-    datos = load_aristas(filename)
+    datos = aristas(filename)
     g = UndirectedGraph(E=datos)
 
+    # vecinosV(g) # muestra el nr de vecinos de cada vertice
+
     if parametros == 3 and sys.argv[2] == "-1":
-         # usamos el algoritmo1
-        a1 = algoritmo1(g) # lista con indices ordenadodos por la longitud de los vecinos del vertice
-        for v in a1:
-            print(vertices[v])
+        # usamos el algoritmo1
+        tup = algoritmo1(g)
+        cant_color = tup[0]
+        dic = tup[1]
+
+        print(cant_color)
+        for t, c in dic.items():
+            print(t[0], t[1], c)
 
     elif parametros == 3 and sys.argv[2] == "-2":
-        # usamos el algoritmo1
+        # usamos el algoritmo2
+        # TODO
         pass
     elif parametros == 4 and sys.argv[3] == "-g":
+        # usamor la opcion grafica
+        op = sys.argv[2]  # que algoritmo usar (1 o 2)
+        if op == "-1":
+            tup = algoritmo1(g)
+        else:
+            tup = algoritmo2(g)
+        cant_color = tup[0]
+        dic = tup[1]
 
-        g = UndirectedGraph(E = [((-3,-2),(0,0)),((0,0),(1,1))])
-        color_dic = {(-3,-2):0,(0,0):1,(1,1):2}#ponemos los colores
-        viewer = GraphColoring2DViewer(g, color_dic, window_size=(800, 800))
+        viewer = GraphColoring2DViewer(g, dic, window_size=(800,800))
         viewer.run()
-        print(algoritmo1(g))
-        print(colorea(g))
+
