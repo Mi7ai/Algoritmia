@@ -142,4 +142,3 @@ if __name__ == '__main__':
 
         viewer = GraphColoring2DViewer(g, dic, window_size=(800,800))
         viewer.run()
-
