@@ -73,7 +73,7 @@ def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
         color = 0
         colorvecinos = [color_dic.get(vecino) for vecino in g.succs(v)]
 
-        # cuenta cuantos color tiene los vecinos
+        # cuenta cuantos color tienen los vecinos
         while color in colorvecinos:
             if color is not None:
                 color += 1
@@ -87,16 +87,51 @@ def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
 
     return n_colores+1, color_dic #cantidad colores y diccionario de colores
 
-
+#testeando
 def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
     color_dic = {}
     n_colores = 0
+    vecinos_coloreados = []
 
     for v in g.V:
-        vecinos_coloreados = 0
-        colorvecinos = [color_dic.get(vecino) for vecino in g.succs(v)]
-        print(len(colorvecinos))
-    vertices_ordenados = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
+        # print("vertice:", v)
+        cantidad_vecinos_coloreados = 0
+        for vecino in g.succs(v):
+            if color_dic.get(vecino) is not None: # encontrado vecino con color
+                cantidad_vecinos_coloreados += 1
+            # print("\tvecinos del vertice:", vecino, "---color del vecino:", color_dic.get(vecino))
+        # print(cantidad_vecinos_coloreados, int(len(g.succs(v))), int(v[0]), int(v[1]))
+        vecinos_coloreados.append((cantidad_vecinos_coloreados, int(len(g.succs(v))), v[0], v[1]))
+
+        vecinos_coloreados_ordenados = sorted(vecinos_coloreados, key=lambda i: (-i[0], -i[1], -i[2], -i[3]))
+
+        # for v_coloreado in vecinos_coloreados_ordenados:
+        #     print(v_coloreado)
+
+        # print("cantidad vecinos coloreados",cantidad_vecinos_coloreados)
+
+        for v_c in vecinos_coloreados_ordenados:
+            v_c = ((v_c[2], v_c[3]))
+            print("v_c", v_c)
+            color = 0
+            colorvecinos = [color_dic.get(vecino) for vecino in g.succs(v_c)]
+
+            # cuenta cuantos color tienen los vecinos
+            while color in colorvecinos:
+                if color is not None:
+                    color += 1
+
+            # asigna el numero de colores totales - 1
+            if color > n_colores:
+                n_colores = color
+
+            # asigna el menor color entre los colores de los vecinos
+            color_dic[v_c] = color
+
+
+
+
+
 
     return n_colores, color_dic
 
@@ -129,8 +164,13 @@ if __name__ == '__main__':
 
     elif parametros == 3 and sys.argv[2] == "-2":
         # usamos el algoritmo2
-        # TODO
-        pass
+        cant_color, dic_vertices_colores = algoritmo2(g)
+        for c,v in dic_vertices_colores.items():
+            print(c, v)
+        print(cant_color)
+        for elem in ordenacion_final(dic_vertices_colores):
+            print(elem[0], elem[1], elem[2])
+
     elif parametros == 4 and sys.argv[3] == "-g":
         # usamor la opcion grafica
         op = sys.argv[2]  # que algoritmo usar (1 o 2)
