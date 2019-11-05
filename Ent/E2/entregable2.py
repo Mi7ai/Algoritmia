@@ -31,42 +31,17 @@ def aristas (filename):
     return datos
 
 
-def lista_vecinos(g: UndirectedGraph):
-    V = g.V
-    lista_vertices = []
-    for v in V:
-        vecinos = int (len(g.succs(v)))
-        x = (v[0])
-        y = (v[1])
-        lista_vertices.append((vecinos, x, y))
-    return sorted(lista_vertices, key=lambda i:(-i[0],-i[1],-i[2]))
-
-
-# devuelve una lista decreciente ordenada por longitud de vecinos de los vertices, coordenada x, coordenada y
-
-
-def vertices_ordenados(g: UndirectedGraph):
-    # s1 = sorted(g.V, key=lambda i: (-len(g.succs(i))))   # orden por la longitud de vecinos de los vertices decreciente
-    # s2 = sorted(g.V, key=lambda i: -i[0])  # orden por la coordenada x de los vertices decreciente
-    # s3 = sorted(g.V, key=lambda i: -i[1])  # orden por la coordenada y de los vertices decreciente
-
-    # print("s1:", s1)
-    # print("s2:", s2)
-    # print("s3:", s3)
-
-    # ordenacion decrediente porlongitud de los vecinos de los vertice,
-    # luego por valor de coordenada x
-    # luego por valor de coordenada y
-    s = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
-    # print("s:", s)
-    return list(s)
-
 # muestra todos los vertices con su nr de vecinos
 
 
 def vecinosV(g: UndirectedGraph):
     for e in g.V:
         print("Vertice: {}, nr vecinos = {}".format(e, len(g.succs(e))))
+
+
+def conjuntos():
+    for i in colorea(g):
+        print(i)
 
 
 def colorea(G: UndirectedGraph):
@@ -89,37 +64,47 @@ def colorea(G: UndirectedGraph):
 
 
 def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
-    lista_colores = colorea(UndirectedGraph(V=vertices_ordenados(g), E=g.E))
+    vertices_ordenados = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
+
     n_colores = 0
     color_dic = {}
 
-    for conjunto in lista_colores:
-        for gr in conjunto:
-            color_dic[gr] = n_colores
-        n_colores += 1
-    return len(lista_colores), color_dic #cantidad colores y diccionario de colores
+    for v in vertices_ordenados:
+        color = 0
+        colorvecinos = [color_dic.get(vecino) for vecino in g.succs(v)]
+
+        # cuenta cuantos color tiene los vecinos
+        while color in colorvecinos:
+            if color is not None:
+                color += 1
+
+        # asigna el numero de colores totales - 1
+        if color > n_colores:
+            n_colores = color
+
+        # asigna el menor color entre los colores de los vecinos
+        color_dic[v] = color
+
+    return n_colores+1, color_dic #cantidad colores y diccionario de colores
 
 
 def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
-    pass
-    # set_vectores_ordenados =
-    lista_colores = colorea(UndirectedGraph(V=g.V, E=g.E))
-
-    n_colores = 0
     color_dic = {}
+    n_colores = 0
 
-    for conjunto in lista_colores:
-        for gr in conjunto:
-            color_dic[gr] = n_colores
-        n_colores += 1
+    for v in g.V:
+        vecinos_coloreados = 0
+        colorvecinos = [color_dic.get(vecino) for vecino in g.succs(v)]
+        print(len(colorvecinos))
+    vertices_ordenados = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
 
-    # TODO
+    return n_colores, color_dic
 
 # devuelve una lista ordenada por el valor de la coordenada x
 # y en caso de empate ordenada por la coordenada y
 
 
-def preatty_print(d: dict):
+def ordenacion_final(d: dict):
     temp_list = []
     for v, c in d.items():
         temp_list.append((v[0], v[1], c))
@@ -133,13 +118,13 @@ if __name__ == '__main__':
     g = UndirectedGraph(E=datos)
 
     # vecinosV(g) # muestra el nr de vecinos de cada vertice
-
+    # conjuntos()
     if parametros == 3 and sys.argv[2] == "-1":
         # usamos el algoritmo1
         cant_color, dic_vertices_colores = algoritmo1(g)
 
         print(cant_color)
-        for elem in preatty_print(dic_vertices_colores):
+        for elem in ordenacion_final(dic_vertices_colores):
             print(elem[0], elem[1], elem[2])
 
     elif parametros == 3 and sys.argv[2] == "-2":
