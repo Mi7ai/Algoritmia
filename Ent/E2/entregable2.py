@@ -1,9 +1,7 @@
 import sys
-import heapq
 from typing import Tuple, Dict
 from algoritmia.datastructures.prioritymaps import MaxHeapMap
 from algoritmia.datastructures.digraphs import UndirectedGraph
-
 from Utils.graphcoloring2dviewer import GraphColoring2DViewer
 
 filename = sys.argv[1]
@@ -37,30 +35,6 @@ def vecinosV(g: UndirectedGraph):
         print("Vertice: {}, nr vecinos = {}".format(e, len(g.succs(e))))
 
 
-def conjuntos():
-    for i in colorea(g):
-        print(i)
-
-
-def colorea(G: UndirectedGraph):
-    # crea copia de los vertices
-    V = set(G.V)
-
-    # lista con los grupos de vértices del mismo color
-    res = []
-    while len(V) > 0:
-        # nuevo grupo vacío
-        grupo = set()
-        # añade los vértices cuyos sucesores no estén ya en grupo
-        for v in V:
-            if all(v not in G.succs(u) for u in grupo):
-                grupo.add(v)
-        # mantiene los elementos que estan en V pero no es grupo
-        V -= grupo
-        res.append(grupo)
-    return res
-
-
 def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
     vertices_ordenados = sorted(g.V, key=lambda i: (-len(g.succs(i)), -i[0], -i[1]))
 
@@ -85,43 +59,33 @@ def algoritmo1(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
 
     return n_colores+1, color_dic #cantidad colores y diccionario de colores
 
-def nr_vecinos(g,v,d):
-    nr_vecinos_coloreados = 0
-    for color_vecino in d.values():
-        if color_vecino is not None:
-            nr_vecinos_coloreados+=1
-    return nr_vecinos_coloreados
-
 
 def algoritmo2(g: UndirectedGraph) -> Tuple[int, Dict[Tuple[int, int], int]]:
-    dic_colores = {}
-    dic_colores_local = {}
-
+    color_dic = {}
     n_colores = 0
-
     maxHeap = MaxHeapMap()
 
     for v in g.V:
         maxHeap[v] = (0, len(g.succs(v)), v[0], v[1])
 
-
     while len(maxHeap) > 0:
         v_actual = maxHeap.extract_opt()
+        colores = [ color_dic.get(vecino) for vecino in g.succs(v_actual)]
 
-        colores = [ dic_colores_local.get(vecino) for vecino in g.succs(v_actual)]
-        # print(colores[0])
         c = 0
         while True:
             if c not in colores:
-                dic_colores_local[v_actual] = c
+                color_dic[v_actual] = c
                 for vecino in g.succs(v_actual):
                     if vecino in maxHeap:
                         maxHeap[vecino] = (maxHeap[vecino][0]+1, maxHeap[vecino][1], maxHeap[vecino][2], maxHeap[vecino][3])
                 break
-            c+=1
+            c += 1
 
-        n_colores = max(c, n_colores)
-    return n_colores+1, dic_colores_local
+            if c > n_colores:
+                n_colores = c
+
+    return n_colores+1, color_dic
 
 # devuelve una lista ordenada por el valor de la coordenada x
 # y en caso de empate ordenada por la coordenada y
@@ -141,7 +105,7 @@ if __name__ == '__main__':
     g = UndirectedGraph(E=datos)
 
     # vecinosV(g) # muestra el nr de vecinos de cada vertice
-    # conjuntos()
+
     if parametros == 3 and sys.argv[2] == "-1":
         # usamos el algoritmo1
         cant_color, dic_vertices_colores = algoritmo1(g)
