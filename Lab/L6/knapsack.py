@@ -1,4 +1,4 @@
-from Utils.bt_scheme import PartialSolutionWithOptimization, BacktrackingOptSolver, State, Solution
+from Utils.bt_scheme import PartialSolutionWithOptimization, BacktrackingOptSolver, Solution, State
 from typing import *
 from random import random, seed
 
