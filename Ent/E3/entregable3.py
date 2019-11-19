@@ -1,4 +1,5 @@
 import sys
+from builtins import list
 from typing import *
 import random
 
@@ -62,7 +63,7 @@ def factible(lpalabras: List[str], d: dict):
 		for c in range(len(lpalabras)):
 
 			letras = [letra for letra in reversed(lpalabras[c].strip())]  # cada letra de la palabra con indice c
-			print(d.get(letras[f]))
+			# print(d.get(letras[f]))
 			if d.get(letras[f]) is None:  # no hay valor asignado
 				return True
 			elif resto > 0:
@@ -83,18 +84,37 @@ def factible(lpalabras: List[str], d: dict):
 	return False
 
 
-def test():
-	# print(random.randint(1, 9))
-	d = {"x": 1}
-	print(d.get("a"))
-	print((9 + 2) % 10)  # si el resto es diferente que la suma , hay resto
+def crear_matriz(lpalabras: List[str]):
+	# m = [[0]*len(lpalabras[len(lpalabras) - 1]) for i in range(len(lpalabras))]
+	# print(m)
 
+	lista_local = []
+	for p in lpalabras:
+		p = p[::-1]
+		p = p.strip()
+		lista_local.append(list(p))
+
+
+	m = []
+	for f in range(len(lpalabras[len(lpalabras) - 1]), -1, -1):
+		m.append([])
+		for c in range(len(lpalabras)):
+			if f < len(lpalabras[c].strip()):
+				letra = lpalabras[c][f]
+				m[f].append(letra)
+	return m
+
+	# for f in range(len(lpalabras)):
+	# 	for c in range(len(lpalabras[len(lpalabras) - 1])):
+	# 		if c < len(lpalabras):
+	# 			m[f][c] = lpalabras[f][c]
+	# return m
 
 if __name__ == "__main__":
 	lista_palabras = datos_fichero(filename)
 	# for sol in cryptosolve(lista_palabras):
 	# 	print(sol)
-	# test()
+	crear_matriz(lista_palabras[0])
 	d = {}
 	d["a"] = 1
 	d["l"] = 2
