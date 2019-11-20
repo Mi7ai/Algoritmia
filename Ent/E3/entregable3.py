@@ -55,6 +55,18 @@ def cryptosolve(lpalabras):
 
 
 def factible(lpalabras: List[str], d: dict):
+
+	m = crear_matriz(lpalabras)
+
+	for f in range(len(m)):
+		for c in range(len(m[f])):
+			if d.get(m[f][c]) is None:
+				return True
+			if c == len(m[f]):
+
+
+
+def factible2(lpalabras: List[str], d: dict):
 	s_local = 0
 	resto = 0
 	lpalabras = lpalabras
@@ -94,32 +106,32 @@ def crear_matriz(lpalabras: List[str]):
 		p = p.strip()
 		lista_local.append(list(p))
 
-
 	m = []
-	for f in range(len(lpalabras[len(lpalabras) - 1]), -1, -1):
+	for f in range(len(lista_local[len(lista_local) - 1])):
 		m.append([])
-		for c in range(len(lpalabras)):
-			if f < len(lpalabras[c].strip()):
-				letra = lpalabras[c][f]
-				m[f].append(letra)
+		for c in range(len(lista_local)):
+			if f < len(lista_local[len(lista_local) - 1]):
+				try:
+					letra = lista_local[c][f]
+					m[f].append(letra)
+				except :
+					continue
 	return m
 
-	# for f in range(len(lpalabras)):
-	# 	for c in range(len(lpalabras[len(lpalabras) - 1])):
-	# 		if c < len(lpalabras):
-	# 			m[f][c] = lpalabras[f][c]
-	# return m
 
 if __name__ == "__main__":
 	lista_palabras = datos_fichero(filename)
 	# for sol in cryptosolve(lista_palabras):
 	# 	print(sol)
-	crear_matriz(lista_palabras[0])
+
 	d = {}
-	d["a"] = 1
-	d["l"] = 2
-	d["b"] = 3
-	d["e"] = 4
-	d["n"] = 5
+
+	# for l in lista_palabras:
+	# 	for p in l:
+	# 		for letra in p.split():
+	# 			r1 = random.randint(0, 9)
+	# 			d[letra] = r1
+
+	# print(crear_matriz(lista_palabras[0]))
 	print(factible(lista_palabras[0], d))
 	print("\n<TERMINADO>")
