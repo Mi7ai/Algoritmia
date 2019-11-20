@@ -53,23 +53,68 @@ def cryptosolve(lpalabras):
 		initialps = CryptoAPS(linea_palabras, ())
 		return BacktrackingSolver.solve(initialps)
 
+def primeras_letras(linea):
+	res = set()
+	for p in linea:
+		for l in p:
+			res.add(l[0])
+			break
+
+	return res
+
 
 def factible(lpalabras: List[str], d: dict):
+	letras_cero = primeras_letras(lpalabras)
+	acarreo = 0
 
 	m = crear_matriz(lpalabras)
 
 	for f in range(len(m)):
+		sa = 0  #suma anteriores
+		sd = 0  #suma digitos
 		for c in range(len(m[f])):
+			#que exista un valor
 			if d.get(m[f][c]) is None:
 				return True
-			if c == len(m[f]):
 
+			#que la 1ª no sea cero
+			if m[f][c] in letras_cero:
+				#comprobar si realmente es cero
+				if d.get(m[f][c]) == 0:
+					return False
+
+			#calculamos suma anteriores
+			if c < len(m[f])-1:
+				sa += d.get(m[f][c])
+
+
+			#calcular acarreo
+			if c == len(m[f])-1: #estoy en la ultima fila
+				sa += acarreo
+
+				#el digito de la suma
+				#compruebo si hay acarreo
+				if sa == d.get(m[f][c]):
+					# no hay acarreo
+					# compruebo suma
+					acarreo = 0
+					continue
+				else:
+					# hay acarreo
+					sd = int(str(sa)[1])
+					#compruebo suma
+					if sd != d.get(m[f][c]):
+						return False
+					acarreo = int(str(sa)[0])
+
+	return True
 
 
 def factible2(lpalabras: List[str], d: dict):
 	s_local = 0
 	resto = 0
 	lpalabras = lpalabras
+	suma_nr_anteriores =0
 	# for f in range(len(lpalabras[len(lpalabras) - 1])-1, -1, -1):  # la longitud de las columnas = la ultima palabra decr
 	for f in range(len(lpalabras[len(lpalabras) - 1])):
 		for c in range(len(lpalabras)):
@@ -80,15 +125,18 @@ def factible2(lpalabras: List[str], d: dict):
 				return True
 			elif resto > 0:
 				s_local += resto
-
+			if c < len(lpalabras) - 1:
+				suma_nr_anteriores += d.get(letras[f])
 			s_local += d.get(letras[f])
 
 			if c == len(lpalabras) - 1:  # si estoy en la ultma fila compruebo la suma
 				# comprobar si hay resto
 				if (s_local % 10) != s_local: #hay resto
-					resto += s_local % 10
+					acarreo = int(str(s_local % 10)[0])
+					if s_local % 10 != d.get(letras[f]):
+						return False
 				# s_global = s_local
-				if s_local != letras[f]:
+				if suma_nr_anteriores != letras[f]:
 					return False
 
 
@@ -126,12 +174,27 @@ if __name__ == "__main__":
 
 	d = {}
 
-	# for l in lista_palabras:
+	# for l in lista_palabras[0]:
 	# 	for p in l:
 	# 		for letra in p.split():
 	# 			r1 = random.randint(0, 9)
 	# 			d[letra] = r1
 
+	d['a'] = 2
+	d['á'] = 3
+	d['n'] = 4
+	d['l'] = 5
+	d['e'] = 8
+	d['h'] = 2
+	d['c'] = 0
+	d['b'] = 7
+	d['s'] = 8
+	d['r'] = 0
+	d['t'] = 5
+	d['i'] = 1
+
+	test1 = ['atrás','atrás','atrás','atrás','irrita']
+	print(factible(test1, d))
 	# print(crear_matriz(lista_palabras[0]))
-	print(factible(lista_palabras[0], d))
+	# print(factible(lista_palabras[6], d))
 	print("\n<TERMINADO>")
