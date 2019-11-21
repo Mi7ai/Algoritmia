@@ -1,4 +1,5 @@
 import sys
+import copy
 from builtins import list
 from typing import *
 import random
@@ -27,31 +28,48 @@ def datos_fichero(filename):
 # dictionario = solucion
 
 
-def cryptosolve(lpalabras):
+def posibles_digitos_dic(l, copia_d):
+	pass
+
+
+def cryptosolve(lpalabras, total_letras, d, ):
 	class CryptoAPS(PartialSolution):
-		def __init__(self, linea, solution):
+		def __init__(self, linea,  d, lvalidas, pletras):
 			self.linea = linea
-			self.solution = solution
+			# self.solution = solution
 			self.n = len(self.solution)
-			self.d = {}
-			self.usados = set()
+			self.d = d
+			self.lvalidas = lvalidas
+			self.pletras = pletras
+
 
 		def is_solution(self) -> bool:
-			pass
+			return len(self.solution) == total_letras
 
 		def get_solution(self) -> Solution:
-			pass
+			return self.solution
 
 		def successors(self) -> Iterable["PartialSolution"]:
-			# max_l = max(len(p1), len(p2))
-			# print(max_l)
+			copia_d = copy.deepcopy(self.d)
 
-			# print(p1[5])
-			pass
+			for l in self.lvalidas:
+				if l not in d:
+					#no esta en el dic, miro que valor ponerle
+					for dic_posible in posibles_digitos_dic(l, copia_d):
+
+						if factible(self.linea, dic_posible):
+							#quitar de lvalidas
+							yield CryptoAPS(self.linea, copia_d, self.lvalidas[1:], self.pletras)
+					else:
+						break
+
+
 
 	for linea_palabras in lpalabras:
-		initialps = CryptoAPS(linea_palabras, ())
+
+		initialps = CryptoAPS(linea_palabras, (), d, letras_validas(linea_palabras), primeras_letras(linea_palabras))
 		return BacktrackingSolver.solve(initialps)
+
 
 def primeras_letras(linea):
 	res = set()
@@ -70,30 +88,29 @@ def factible(lpalabras: List[str], d: dict):
 	m = crear_matriz(lpalabras)
 
 	for f in range(len(m)):
-		sa = 0  #suma anteriores
-		sd = 0  #suma digitos
+		sa = 0  # suma anteriores
+		sd = 0  # suma digitos
 		for c in range(len(m[f])):
-			#que exista un valor
+			# que exista un valor
 			if d.get(m[f][c]) is None:
 				return True
 
-			#que la 1ª no sea cero
+			# que la 1ª no sea cero
 			if m[f][c] in letras_cero:
-				#comprobar si realmente es cero
+				# comprobar si realmente es cero
 				if d.get(m[f][c]) == 0:
 					return False
 
-			#calculamos suma anteriores
-			if c < len(m[f])-1:
+			# calculamos suma anteriores
+			if c < len(m[f]) - 1:
 				sa += d.get(m[f][c])
 
-
-			#calcular acarreo
-			if c == len(m[f])-1: #estoy en la ultima fila
+			# calcular acarreo
+			if c == len(m[f]) - 1:  # estoy en la ultima fila
 				sa += acarreo
 
-				#el digito de la suma
-				#compruebo si hay acarreo
+				# el digito de la suma
+				# compruebo si hay acarreo
 				if sa == d.get(m[f][c]):
 					# no hay acarreo
 					# compruebo suma
@@ -102,7 +119,7 @@ def factible(lpalabras: List[str], d: dict):
 				else:
 					# hay acarreo
 					sd = int(str(sa)[1])
-					#compruebo suma
+					# compruebo suma
 					if sd != d.get(m[f][c]):
 						return False
 					acarreo = int(str(sa)[0])
@@ -114,7 +131,7 @@ def factible2(lpalabras: List[str], d: dict):
 	s_local = 0
 	resto = 0
 	lpalabras = lpalabras
-	suma_nr_anteriores =0
+	suma_nr_anteriores = 0
 	# for f in range(len(lpalabras[len(lpalabras) - 1])-1, -1, -1):  # la longitud de las columnas = la ultima palabra decr
 	for f in range(len(lpalabras[len(lpalabras) - 1])):
 		for c in range(len(lpalabras)):
@@ -131,14 +148,13 @@ def factible2(lpalabras: List[str], d: dict):
 
 			if c == len(lpalabras) - 1:  # si estoy en la ultma fila compruebo la suma
 				# comprobar si hay resto
-				if (s_local % 10) != s_local: #hay resto
+				if (s_local % 10) != s_local:  # hay resto
 					acarreo = int(str(s_local % 10)[0])
 					if s_local % 10 != d.get(letras[f]):
 						return False
 				# s_global = s_local
 				if suma_nr_anteriores != letras[f]:
 					return False
-
 
 	# comprobar suma xq estan todas las palabras asignadas con un valor
 	return False
@@ -162,18 +178,37 @@ def crear_matriz(lpalabras: List[str]):
 				try:
 					letra = lista_local[c][f]
 					m[f].append(letra)
-				except :
+				except:
 					continue
 	return m
 
+#le pasas 1 linea y te devuelve las letras ordenadas para meterlas en el dic
+
+
+def letras_validas(lpalabras):
+	m = crear_matriz(lpalabras)
+	res = []
+	for f in range(len(m)):
+		for c in range(len(m[f])):
+			if m[f][c] not in res:
+				res.append(m[f][c])
+	return res
 
 if __name__ == "__main__":
 	lista_palabras = datos_fichero(filename)
-	# for sol in cryptosolve(lista_palabras):
-	# 	print(sol)
-
+	no_usados = set(i for i in range(0, 10))
 	d = {}
 
+	for linea_palabras in lista_palabras:
+		total_letras = 0
+
+		for palabra in linea_palabras:
+			total_letras += len(palabra.strip())
+
+	# for sol in cryptosolve(list(lista_palabras), no_usados, total_letras, d):
+	# 	print(sol)
+
+	print(letras_validas(lista_palabras[0]))
 	# for l in lista_palabras[0]:
 	# 	for p in l:
 	# 		for letra in p.split():
@@ -193,7 +228,7 @@ if __name__ == "__main__":
 	d['t'] = 5
 	d['i'] = 1
 
-	test1 = ['atrás','atrás','atrás','atrás','irrita']
+	test1 = ['atrás', 'atrás', 'atrás', 'atrás', 'irrita']
 	print(factible(test1, d))
 	# print(crear_matriz(lista_palabras[0]))
 	# print(factible(lista_palabras[6], d))
