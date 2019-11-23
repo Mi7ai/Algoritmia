@@ -28,46 +28,76 @@ def datos_fichero(filename):
 # dictionario = solucion
 
 
-def posibles_digitos_dic(l, copia_d):
-	pass
+# pletras: (primeras letra) letras que no pueden ser cero
+
+def posibles_digitos_dic(lvalidas, d, pletras):
+	copia_d = copy.deepcopy(d)
+	nr_asignados_dic = []
+	# tengo que mirar que numeros tengo para no repetirlos en el diccionario
+	for v, k in copia_d.items():
+		nr_asignados_dic.append(k)
+
+	for l in lvalidas:
+		# r1 = random.randint(0, 9)
+		while copia_d.get(l) is None:  # miro si hay letra en el diccionario con un valor asignado
+			r1 = random.randint(0, 9)
+
+			if r1 not in nr_asignados_dic:
+				if l in pletras:
+					if r1 != 0:  # si la letra es propensa a ser cero y el numero que se le asigna != 0
+						copia_d[l] = r1
+
+				else:
+					copia_d[l] = r1
+				# yield copia_d
+				# return copia_d
+			nr_asignados_dic.append(r1)
+		return copia_d
 
 
-def cryptosolve(lpalabras, total_letras, d, ):
+# return copia_d
+
+
+#  lpalabras: letras del fichero
+#  d: diccionario que vamos a mirar
+#  lvalidas: las letras no repetidas que contiene la linea
+#  pletras: la primeras letras que no pueden ser cero
+
+
+def cryptosolve(lpalabras):
 	class CryptoAPS(PartialSolution):
-		def __init__(self, linea,  d, lvalidas, pletras):
+		def __init__(self, linea, d: dict, lvalidas, pletras):
 			self.linea = linea
 			# self.solution = solution
-			self.n = len(self.solution)
 			self.d = d
+			self.n = len(self.d.keys())
+
 			self.lvalidas = lvalidas
 			self.pletras = pletras
 
-
 		def is_solution(self) -> bool:
-			return len(self.solution) == total_letras
+			return len(self.lvalidas) == self.n and factible(self.linea, self.d)
 
 		def get_solution(self) -> Solution:
-			return self.solution
+			return self.d
 
 		def successors(self) -> Iterable["PartialSolution"]:
 			copia_d = copy.deepcopy(self.d)
+			copia_v = copy.deepcopy(self.lvalidas)
+			if self.n < len(self.lvalidas):
 
-			for l in self.lvalidas:
-				if l not in d:
-					#no esta en el dic, miro que valor ponerle
-					for dic_posible in posibles_digitos_dic(l, copia_d):
-
+				for l in range(len(self.lvalidas)):
+					if self.lvalidas[l] not in copia_d:
+						dic_posible = posibles_digitos_dic(self.lvalidas, copia_d, primeras_letras(self.linea))
 						if factible(self.linea, dic_posible):
-							#quitar de lvalidas
-							yield CryptoAPS(self.linea, copia_d, self.lvalidas[1:], self.pletras)
-					else:
-						break
+							yield CryptoAPS(self.linea, dic_posible, copia_v, self.pletras)
 
+						# dic_posible = posibles_digitos_dic(self.lvalidas, copia_d, primeras_letras(self.linea))
+						# CryptoAPS(self.linea, dic_posible[1:], copia_v[1:], self.pletras)
 
-
+	dletras = {}
 	for linea_palabras in lpalabras:
-
-		initialps = CryptoAPS(linea_palabras, (), d, letras_validas(linea_palabras), primeras_letras(linea_palabras))
+		initialps = CryptoAPS(linea_palabras, dletras, letras_validas(linea_palabras), primeras_letras(linea_palabras))
 		return BacktrackingSolver.solve(initialps)
 
 
@@ -78,6 +108,16 @@ def primeras_letras(linea):
 			res.add(l[0])
 			break
 
+	return res
+
+
+def letras_validas(lpalabras):
+	m = crear_matriz(lpalabras)
+	res = []
+	for f in range(len(m)):
+		for c in range(len(m[f])):
+			if m[f][c] not in res:
+				res.append(m[f][c])
 	return res
 
 
@@ -116,14 +156,15 @@ def factible(lpalabras: List[str], d: dict):
 					# compruebo suma
 					acarreo = 0
 					continue
-				else:
+				if sa >= 10:
 					# hay acarreo
 					sd = int(str(sa)[1])
 					# compruebo suma
 					if sd != d.get(m[f][c]):
 						return False
 					acarreo = int(str(sa)[0])
-
+				if sa < 10 and sa != d.get(m[f][c]):
+					return False
 	return True
 
 
@@ -182,17 +223,9 @@ def crear_matriz(lpalabras: List[str]):
 					continue
 	return m
 
-#le pasas 1 linea y te devuelve las letras ordenadas para meterlas en el dic
 
+# le pasas 1 linea y te devuelve las letras ordenadas para meterlas en el dic
 
-def letras_validas(lpalabras):
-	m = crear_matriz(lpalabras)
-	res = []
-	for f in range(len(m)):
-		for c in range(len(m[f])):
-			if m[f][c] not in res:
-				res.append(m[f][c])
-	return res
 
 if __name__ == "__main__":
 	lista_palabras = datos_fichero(filename)
@@ -205,10 +238,10 @@ if __name__ == "__main__":
 		for palabra in linea_palabras:
 			total_letras += len(palabra.strip())
 
-	# for sol in cryptosolve(list(lista_palabras), no_usados, total_letras, d):
-	# 	print(sol)
+	for sol in cryptosolve(list(lista_palabras)):
+		print(sol)
 
-	print(letras_validas(lista_palabras[0]))
+	# print(letras_validas(lista_palabras[0]))
 	# for l in lista_palabras[0]:
 	# 	for p in l:
 	# 		for letra in p.split():
