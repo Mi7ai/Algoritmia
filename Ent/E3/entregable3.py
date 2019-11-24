@@ -15,6 +15,7 @@ def datos_fichero(filename):
 		f = open(filename, "r", encoding="utf-8")
 
 		for line in f:
+			line.strip()
 			palabra = line.split(" ")
 			datos.append(palabra)
 
@@ -30,29 +31,29 @@ def datos_fichero(filename):
 
 # pletras: (primeras letra) letras que no pueden ser cero
 
-def posibles_digitos_dic(lvalidas, d, pletras):
-	copia_d = copy.deepcopy(d)
-	nr_asignados_dic = []
-	# tengo que mirar que numeros tengo para no repetirlos en el diccionario
-	for v, k in copia_d.items():
-		nr_asignados_dic.append(k)
-
-	for l in lvalidas:
-		# r1 = random.randint(0, 9)
-		while copia_d.get(l) is None:  # miro si hay letra en el diccionario con un valor asignado
-			r1 = random.randint(0, 9)
-
-			if r1 not in nr_asignados_dic:
-				if l in pletras:
-					if r1 != 0:  # si la letra es propensa a ser cero y el numero que se le asigna != 0
-						copia_d[l] = r1
-
-				else:
-					copia_d[l] = r1
-				# yield copia_d
-				# return copia_d
-			nr_asignados_dic.append(r1)
-		return copia_d
+# def posibles_digitos_dic(lvalidas, d, pletras):
+# 	copia_d = copy.deepcopy(d)
+# 	nr_asignados_dic = []
+# 	# tengo que mirar que numeros tengo para no repetirlos en el diccionario
+# 	for v, k in copia_d.items():
+# 		nr_asignados_dic.append(k)
+#
+# 	for l in lvalidas:
+# 		# r1 = random.randint(0, 9)
+# 		while copia_d.get(l) is None:  # miro si hay letra en el diccionario con un valor asignado
+# 			r1 = random.randint(0, 9)
+#
+# 			if r1 not in nr_asignados_dic:
+# 				if l in pletras:
+# 					if r1 != 0:  # si la letra es propensa a ser cero y el numero que se le asigna != 0
+# 						copia_d[l] = r1
+#
+# 				else:
+# 					copia_d[l] = r1
+# 				# yield copia_d
+# 				# return copia_d
+# 			nr_asignados_dic.append(r1)
+# 		return copia_d
 
 
 # return copia_d
@@ -64,41 +65,48 @@ def posibles_digitos_dic(lvalidas, d, pletras):
 #  pletras: la primeras letras que no pueden ser cero
 
 
-def cryptosolve(lpalabras):
+def cryptosolve(linea_palabras):
 	class CryptoAPS(PartialSolution):
 		def __init__(self, linea, d: dict, lvalidas, pletras):
 			self.linea = linea
 			# self.solution = solution
 			self.d = d
-			self.n = len(self.d.keys())
+			self.n = len(self.d)
 
 			self.lvalidas = lvalidas
 			self.pletras = pletras
 
 		def is_solution(self) -> bool:
-			return len(self.lvalidas) == self.n and factible(self.linea, self.d)
+			return len(self.lvalidas) == 0 and factible(self.linea, self.d)
 
 		def get_solution(self) -> Solution:
 			return self.d
 
 		def successors(self) -> Iterable["PartialSolution"]:
 			copia_d = copy.deepcopy(self.d)
-			copia_v = copy.deepcopy(self.lvalidas)
-			if self.n < len(self.lvalidas):
+			# copia_v = copy.deepcopy(self.lvalidas)
+			if len(self.lvalidas) > 0:
 
-				for l in range(len(self.lvalidas)):
-					if self.lvalidas[l] not in copia_d:
-						dic_posible = posibles_digitos_dic(self.lvalidas, copia_d, primeras_letras(self.linea))
-						if factible(self.linea, dic_posible):
-							yield CryptoAPS(self.linea, dic_posible, copia_v, self.pletras)
+				for nr in posibles_en(copia_d):
+					l = self.lvalidas[0]
+					copia_d[l] = nr
+					if factible(self.linea, copia_d):
+						yield CryptoAPS(self.linea, copia_d, self.lvalidas[1:], self.pletras)
 
-						# dic_posible = posibles_digitos_dic(self.lvalidas, copia_d, primeras_letras(self.linea))
-						# CryptoAPS(self.linea, dic_posible[1:], copia_v[1:], self.pletras)
+
+	# dic_posible = posibles_digitos_dic(self.lvalidas, copia_d, primeras_letras(self.linea))
+	# CryptoAPS(self.linea, dic_posible[1:], copia_v[1:], self.pletras)
 
 	dletras = {}
-	for linea_palabras in lpalabras:
-		initialps = CryptoAPS(linea_palabras, dletras, letras_validas(linea_palabras), primeras_letras(linea_palabras))
-		return BacktrackingSolver.solve(initialps)
+
+	initialps = CryptoAPS(linea_palabras, dletras, letras_validas(linea_palabras), primeras_letras(linea_palabras))
+	return BacktrackingSolver.solve(initialps)
+
+
+def posibles_en(d: dict):
+	posibles = [i for i in range(10)]
+
+	return set(posibles) - set(d.values())
 
 
 def primeras_letras(linea):
@@ -226,43 +234,52 @@ def crear_matriz(lpalabras: List[str]):
 
 # le pasas 1 linea y te devuelve las letras ordenadas para meterlas en el dic
 
+def pretty_print(resultado, palabras):
+	imprimir = "+".join(palabras[:-1]) + " = " + palabras[-1] + " => "
+
+	# Si solo hay una solución
+	if len(resultado) == 1:
+		res = resultado[0]
+		valor_letras = []
+
+		for p in palabras:
+			sol = ""
+			for l in p:
+				if l in res:
+					sol += str(res[l])
+				else:
+					sol += '@'
+			valor_letras.append(sol)
+
+		imprimir += "+".join(valor_letras[:-1]) + " = " + valor_letras[-1]
+		print(imprimir)
+	# Si hay varias soluciones
+	else:
+		print(imprimir + str(len(resultado)) + " soluciones")
+
 
 if __name__ == "__main__":
 	lista_palabras = datos_fichero(filename)
-	no_usados = set(i for i in range(0, 10))
+
+	# for linea in lista_palabras:
+	# 	sol = list(cryptosolve(linea))
+	# 	pretty_print(sol, linea)
+	# 	print(sol)
+	# [{'a': 7, 'n': 4, 'l': 5, 'e': 1, 'h': 2, 'b': 9, 'c': 6}]
+
+	# # v2
+	test1 = ['besa', 'sea', 'eras']
 	d = {}
-
-	for linea_palabras in lista_palabras:
-		total_letras = 0
-
-		for palabra in linea_palabras:
-			total_letras += len(palabra.strip())
-
-	for sol in cryptosolve(list(lista_palabras)):
-		print(sol)
-
-	# print(letras_validas(lista_palabras[0]))
-	# for l in lista_palabras[0]:
-	# 	for p in l:
-	# 		for letra in p.split():
-	# 			r1 = random.randint(0, 9)
-	# 			d[letra] = r1
-
 	d['a'] = 2
-	d['á'] = 3
-	d['n'] = 4
-	d['l'] = 5
+	d['r'] = 3
 	d['e'] = 8
-	d['h'] = 2
-	d['c'] = 0
-	d['b'] = 7
-	d['s'] = 8
-	d['r'] = 0
-	d['t'] = 5
-	d['i'] = 1
-
-	test1 = ['atrás', 'atrás', 'atrás', 'atrás', 'irrita']
+	d['b'] = 9
+	d['s'] = 4
+	#
+	# sol = list(cryptosolve(test1))
+	# pretty_print(sol, test1)
+	# print(sol)
+	# print(factible(lista_palabras[0], d))
 	print(factible(test1, d))
-	# print(crear_matriz(lista_palabras[0]))
 	# print(factible(lista_palabras[6], d))
 	print("\n<TERMINADO>")
