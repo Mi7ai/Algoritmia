@@ -57,7 +57,7 @@ def recursos_rec_mem_camino(v: Dict[Tuple[int, int], int], m: List[int], U: int)
         k = mem[n, u][1]
         sol.append(k)
         n -= 1
-        u -= 1
+        u -= k
     sol.reverse()
     # --------------------
     return score, sol
