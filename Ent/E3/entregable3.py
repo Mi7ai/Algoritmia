@@ -7,7 +7,7 @@ import random
 from Utils.bt_scheme import PartialSolution, BacktrackingSolver, Solution
 
 __author__ ='Mihai Manea'
-__status__ = "Finished. Need improvement"
+__status__ = "Finished. Needs improvement"
 
 filename = sys.argv[1]
 
