@@ -25,8 +25,8 @@ def lista_solver(C, S):
 
 
 if __name__ == '__main__':
-	C = [[1, 2, 3], [4, 2, 1], [1, 8, 2]]
-	S = 5
+	C = [[0, 1, 10], [1, 0, 10], [1, 0, 10],[1, 0, 10]]
+	S = 4
 
 	for sol in lista_solver(C, S):
 		print(sol)
