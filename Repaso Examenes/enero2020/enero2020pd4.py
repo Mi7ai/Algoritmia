@@ -1,5 +1,6 @@
 def partido_rec_mem_camino(C, S, N, M):
 	def L(n, m):
+
 		if n == 0:
 			return 0
 		if (n, m) not in mem:
@@ -30,6 +31,6 @@ if __name__ == '__main__':
 	C = [5, 15, 8, 10]
 	S = [5, 4, 1, 6]
 	N = [0, 0, 0, 0]
-	M = 10
+	M = 15
 	K = 5
 	print(partido_rec_mem_camino(C, S, N, M))
