@@ -8,6 +8,6 @@ def galeria(X, D):
 
 
 if __name__ == '__main__':
-	X = [2, 3, 4, 9, 13]
+	X = [2, 3, 4, 7, 8, 9, 13]
 	D = 2
 	print(galeria(X, D))
