@@ -37,7 +37,7 @@ def solver(C, A, B):
 if __name__ == '__main__':
 	C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 	A = 20
-	B = 15
+	B = 20
 	CA = []
 	CB = []
 	for sol in solver(C, A, B):
