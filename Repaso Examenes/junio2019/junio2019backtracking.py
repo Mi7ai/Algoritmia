@@ -3,13 +3,12 @@ from Utils.bt_scheme import BacktrackingVCSolver, PartialSolutionWithVisitedCont
 
 def cuerda_solver(L, P, M):
 	"""
-	Funcion que devuelve el coste minimo de vallas
+	Funcion que devuelve la cantidad de vallas de longitud L a usar
 
 	Parameters:
-	L (list): longitud vallas
-	C (list): cantidad vallas disponibles
-	P (list): precio por valla
-	M (int): longitud de la valla a comprobar
+	L (list): longitud cuerdas
+	P (list): cantidad cuerdas disponibles
+	M (int): longitud de la cuerdas a comprobar
 
 	"""
 
@@ -40,7 +39,7 @@ def cuerda_solver(L, P, M):
 if __name__ == '__main__':
 	L = [1, 2, 3]
 	P = [5, 5, 5]
-	M = 20
+	M = 25
 	imprime = False
 	for sol in cuerda_solver(L, P, M):
 		imprime = True
