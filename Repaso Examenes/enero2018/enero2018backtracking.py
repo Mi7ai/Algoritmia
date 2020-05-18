@@ -48,7 +48,7 @@ if __name__ == '__main__':
 	L = [1, 2, 3]
 	C = [5, 5, 5]
 	P = [10, 8, 5]
-	M = 2
+	M = 4
 	imprime = False
 	for sol in vallado_solver(L, C, P, M):
 		imprime = True
