@@ -40,6 +40,6 @@ def coin_change_solve(K, C, V, W):
 
 if __name__ == '__main__':
 	k, c, n, v, w = datos_fichero(filename)
-	# print(k, c, n, v, w)
+	print(k, c, n, v, w)
 
 	print(coin_change_solve(k, c, v, w))

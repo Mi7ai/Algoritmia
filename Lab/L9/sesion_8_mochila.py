@@ -120,7 +120,7 @@ def mochila_iter_reduccion_coste(v: List[int], w: List[int], C: int) -> int:
 if __name__ == "__main__":
     values = [90, 75, 60, 20, 10]
     weights = [4, 3, 3, 2, 2]
-    capacity = 6
+    capacity = 4
 
     print("Versión recursiva:")
     print(mochila_rec(values, weights, capacity))

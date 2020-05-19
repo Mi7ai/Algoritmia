@@ -1,9 +1,5 @@
 import random
 
-
-
-for i in range(10):
-	a = random.random(0, 9)
-	while a != 4:
-		pass
-
+ficha = (1, 2)
+a = [1,2]
+print(ficha)

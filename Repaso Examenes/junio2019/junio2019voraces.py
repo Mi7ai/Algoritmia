@@ -14,8 +14,8 @@ def cuerda(L, B, P, M):
 
 if __name__ == '__main__':
 	L = [1, 5, 10, 1]
-	B = [5, 4, 1, 2]
+	B = [1, 6, 1, 2]
 	P = [10, 10, 10, 10]
 	M = 20
 	res = cuerda(L, B, P, M)
-	print("{} resto: {}".format(res, M - sum(res)))
+	print("{}".format(res))
