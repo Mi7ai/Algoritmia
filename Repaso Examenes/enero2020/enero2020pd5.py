@@ -25,14 +25,16 @@ def vallado_rec_mem_camino(L, P, S, M, N):
 	i, m = len(L), M
 	score = C(i, m)
 
-	while i > 0:
-		# print(mem[0, 0][1])
-		d = mem[i, m][1]
-		m -= d * L[i - 1]
-		i -= 1
-		sol.append(d)
-	sol.reverse()
-	return score, sol
+	if score != infinity:
+		while i > 0 and m > 0:
+			# print(mem[0, 0][1])
+			d = mem[i, m][1]
+			m -= d * L[i - 1]
+			i -= 1
+			sol.append(d)
+		sol.reverse()
+		return score, sol
+	return score
 
 
 if __name__ == '__main__':

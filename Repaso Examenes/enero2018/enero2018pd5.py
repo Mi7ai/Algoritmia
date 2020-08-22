@@ -30,6 +30,7 @@ def LCS(X, Y):
 if __name__ == '__main__':
 	X = 'abck'
 	Y = 'abfk'
+	print()
 	_, s = LCS(X, Y)
 
 	for x,y in s:

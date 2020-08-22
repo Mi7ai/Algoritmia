@@ -1,5 +1,3 @@
 import random
-
-ficha = (1, 2)
-a = [1,2]
-print(ficha)
+m = max(())
+print(abs(-5-2))

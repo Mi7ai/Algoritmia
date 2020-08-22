@@ -1,0 +1,4 @@
+a) F --> es menor o igual
+b) F --> es menor o igual
+c) V
+d) F --> hace falta la optimista para ordenar en el heap
