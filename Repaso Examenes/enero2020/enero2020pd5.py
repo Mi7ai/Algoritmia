@@ -13,7 +13,6 @@ def vallado_rec_mem_camino(L, P, S, M, N):
 			return infinity
 
 		if (i, m) not in mem:
-
 			if i > 0 and m >= L[i - 1]:
 				mem[i, m] = min(
 					(C(i - 1, m - d * L[i - 1]) + d * P[i - 1], d) for d in range(1, min(m // L[i - 1], S[i - 1]) + 1)
