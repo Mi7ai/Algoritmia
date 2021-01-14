@@ -29,7 +29,7 @@ def cuerda_solver(L, P, M):
 
 		def successors(self):
 			if self.n < len(L):
-				for c in range(0, min(P[self.n], self.lcuerdas // L[self.n]) + 1):
+				for c in range(min(P[self.n], self.lcuerdas // L[self.n]) + 1):
 					yield CuerdasPS(self.ds + (c,), self.lcuerdas - (L[self.n] * c))
 
 	initial_ps = CuerdasPS((), M)
