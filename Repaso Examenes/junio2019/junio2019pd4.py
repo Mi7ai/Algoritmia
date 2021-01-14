@@ -33,6 +33,6 @@ def cuerda(L, B, P, M):
 if __name__ == '__main__':
 	L = [1, 2, 5, 10]
 	B = [100, 200, 500, 1000]
-	P = [4, 5, 4, 1]
-	M = 13
+	P = [4, 5, 4, 2]
+	M = 23
 	print(cuerda(L, B, P, M))
