@@ -1,4 +1,4 @@
-from algoritmia.utils import infinity
+from Utils.bt_scheme import infinity
 from typing import *
 
 # LA MOCHILA NO SE TIENE QUE LLENAR TODA
@@ -24,7 +24,7 @@ def mochila_parcial_llena_v2(C, V, W):
 			return 0
 
 		if W[n - 1] <= c:
-			return max(L(n-1, c), L(n - 1, c - d * W[n - 1]) + d * V[n - 1] for d in range(0, 2))
+			return max(L(n - 1, c - d * W[n - 1]) + d * V[n - 1] for d in range(1, 2))
 		else:
 			return L(n - 1, c)
 
@@ -38,3 +38,4 @@ if __name__ == "__main__":
 	capacity = 6
 
 	print(mochila_parcial_llena_v1(capacity, values, weights))
+	print(mochila_parcial_llena_v2(capacity, values, weights))
