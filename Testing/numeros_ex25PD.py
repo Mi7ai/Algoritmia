@@ -9,7 +9,7 @@ def numeros(N, K):
 			return infinity
 		# if (n, c) not in mem:
 		if k > 0 and n > 0:
-			for d in range(1,k):
+			for d in range(max(1,(n//k)+1)):
 				print(d)
 				return max(L(k-1, n),L(k - 1, n - d) * d)
 
