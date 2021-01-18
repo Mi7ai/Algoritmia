@@ -22,7 +22,6 @@ def cuerda(L, B, P, M):
 	sol = []
 	while n > 0:
 		d = mem[n, m][1]
-
 		m -= d * L[n - 1]
 		n -= 1
 		sol.append(d)
