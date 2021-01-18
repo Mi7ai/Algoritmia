@@ -1,8 +1,8 @@
-from Utils.bt_scheme import BacktrackingSolver
+from Utils.bt_scheme import BacktrackingSolver, PartialSolution
 
 
 def lista_solver(C, S):
-	class ListaPs(BacktrackingSolver):
+	class ListaPs(PartialSolution):
 		def __init__(self, ds, sumaLocal):
 			self.ds = ds
 			self.n = len(ds)
@@ -26,7 +26,7 @@ def lista_solver(C, S):
 
 if __name__ == '__main__':
 	C = [[0, 1, 10], [1, 0, 10], [1, 0, 10],[1, 0, 10]]
-	S = 4
+	S = 40
 
 	for sol in lista_solver(C, S):
 		print(sol)
