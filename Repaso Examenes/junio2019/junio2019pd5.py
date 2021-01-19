@@ -1,7 +1,7 @@
 from Utils.bt_scheme import infinity
 
 
-def g(f, c):
+def g(f, c) -> int:
 	return f * c
 
 
@@ -13,8 +13,10 @@ def fondos_rec_mem_camino(D, F, M):
 		if (f, d) not in mem:
 			if f > 0 and d < M:
 				mem[f, d] = (B(f - 1, d), 0)
-			else:
-				mem[f, d] = max((B(f - 1, d - k) + g(f - 1, k), k) for k in range(M, d))
+			elif f > 0 and d >= M:
+				for k in range(M, d):
+					mem[f, d] = max((B(f - 1, d),0),(B(f - 1, d - k) + g(f - 1, k), k) )
+
 			return mem[f, d][0]
 
 	mem = {}
