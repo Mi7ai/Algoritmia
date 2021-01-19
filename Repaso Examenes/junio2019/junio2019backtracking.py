@@ -39,7 +39,7 @@ def cuerda_solver(L, P, M):
 if __name__ == '__main__':
 	L = [1, 2, 3]
 	P = [5, 5, 5]
-	M = 25
+	M = 9
 	imprime = False
 	for sol in cuerda_solver(L, P, M):
 		imprime = True
