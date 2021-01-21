@@ -52,7 +52,7 @@ def binpacking_solve(objects: List[int], capacity: int):
                         cw[cont] += objects[obj]  # meto el peso en el contenedor
                         break
                 else:
-                    cw.
+                    pass
 
             return len(cw)
         def is_solution(self) -> bool:
