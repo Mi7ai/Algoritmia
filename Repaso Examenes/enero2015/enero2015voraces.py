@@ -1,3 +1,4 @@
+# no coge los numeros de X, a veces
 def galeria(X, D):
 	res = [X[0] + D]
 
