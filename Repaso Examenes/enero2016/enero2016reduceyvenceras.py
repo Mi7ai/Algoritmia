@@ -6,7 +6,7 @@ def solve_indice(v):
 		if j - i <= 1:
 			return i
 		# Indice del medio
-		m = i + j // 2
+		m = (i + j) // 2
 
 		if v[m] < v[m - 1] and v[m] < v[m + 1]:
 			return m
@@ -26,7 +26,7 @@ def solve_indice2(v):
 			return i
 
 		if j - i == 2:
-			return min(v[i], v[i+1])
+			return v.index(min(v[i], v[i+1]))
 
 		elif v[m] > v[m - 1]:
 			# el min esta en la iz
@@ -38,7 +38,7 @@ def solve_indice2(v):
 
 
 if __name__ == '__main__':
-	V = [20, 10, 8, 18, 15, 9, 20]
+	V = [20, 10, 80, 18, 15, 90]
 	print(solve_indice(V))
 	print(solve_indice2(V))
 
