@@ -1,5 +1,5 @@
 import random
-
+# No creo que esta bien
 
 def union_cuerdas(c):
 	"""Devuelve el coste minimo de unir las cuerdas de c.
