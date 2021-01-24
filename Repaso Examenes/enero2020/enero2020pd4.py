@@ -30,7 +30,7 @@ def partido_rec_mem_camino(C, S, N, M):
 if __name__ == '__main__':
 	C = [5, 15, 8, 10]
 	S = [5, 4, 1, 6]
-	N = [0, 0, 0, 0]
+	N = [3, 5, 6, 4]
 	M = 15
 	K = 5
 	print(partido_rec_mem_camino(C, S, N, M))
