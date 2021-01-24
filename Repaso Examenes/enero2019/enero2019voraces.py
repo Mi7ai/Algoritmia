@@ -1,5 +1,5 @@
 import random
-# No creo que esta bien
+
 
 def union_cuerdas(c):
 	"""Devuelve el coste minimo de unir las cuerdas de c.
@@ -36,6 +36,6 @@ def union_cuerdas(c):
 if __name__ == '__main__':
 	random.seed(3)
 	# C = [random.randint(1, 5) for i in range(6)]
-	C = [14,7,6,4,9]
+	C = [14, 7, 6, 4, 9]
 	print(C)
 	print("Coste union: {}".format(union_cuerdas(C)))

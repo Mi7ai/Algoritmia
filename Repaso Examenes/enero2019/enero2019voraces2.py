@@ -2,7 +2,7 @@ import random
 
 from algoritmia.datastructures.priorityqueues import MinHeap
 
-
+# Este si esta bien
 def cuerdas(v):
 	minheap = MinHeap()
 	for elem in v:
@@ -19,11 +19,11 @@ def cuerdas(v):
 
 
 if __name__ == '__main__':
-	V1 = [14, 7, 6, 4, 9, 3]
+	V1 = [14, 7, 6, 4, 9]
 
 	random.seed(3)
 	C = [random.randint(1, 5) for i in range(6)]
 
-	print(cuerdas(V1))  # 106
+	print(cuerdas(V1))
 	print(C)
 	print(cuerdas(C))   # 55

@@ -21,4 +21,4 @@ def voraces(vector):
 if __name__ == '__main__':
     V = [14, 7, 6, 4, 9]
     V1 = [1, 2, 3, 4, 5]
-    print(voraces(V1))
+    print(voraces(V))
