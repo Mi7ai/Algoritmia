@@ -13,17 +13,23 @@ def fondos_rec_mem_camino(D, F, M):
 		if (f, d) not in mem:
 			if f > 0 and d < M:
 				mem[f, d] = (B(f - 1, d), 0)
-			elif f > 0 and d >= M:
-				for k in range(M, d):
-					mem[f, d] = max((B(f - 1, d),0),(B(f - 1, d - k) + g(f - 1, k), k) )
+			else:
+				mem[f, d] = max((B(f - 1, d - k) + g(f - 1, k), k) for k in range(M, d + 1))
 
-			return mem[f, d][0]
+		return mem[f, d][0]
 
 	mem = {}
 	sol = []
 	f, d = F, D
 	score = B(F, D)
 
+	while f > 0:
+		k = mem[f, d][1]
+		sol.append(k)
+		d -= k
+		f -= 1
+
+	sol.reverse()
 	return score, sol
 
 
