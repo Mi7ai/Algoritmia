@@ -30,7 +30,7 @@ def mineros2(V):
 		if n == 0:
 			return 0
 		if (n, c) not in mem:
-			if n > 0 and  V[n - 1] > c:
+			if n > 0 :
 				mem[n, c] = min((L(n - 1, c - d * V[n - 1]) + d * V[n - 1], d) for d in range(2))
 			else:
 				mem[n, c] = (L(n - 1, c - 1 * V[n - 1]) + 1 * V[n - 1],  1)

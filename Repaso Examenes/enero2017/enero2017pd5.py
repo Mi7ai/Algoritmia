@@ -57,10 +57,8 @@ def vallado_rec_mem_camino2(M, L, P, S):
 	score = C(i, m)
 
 	while i > 0:
-		iant, mant, j = mem[i, m][1]
+		i, m, j = mem[i, m][1]
 		sol.append(j)
-		m = mant
-		i = iant
 	sol.reverse()
 	return score, sol
 
@@ -74,3 +72,4 @@ if __name__ == '__main__':
 	S = [10, 10, 10]
 
 	print(vallado_rec_mem_camino(M, L, P, S))
+	print(vallado_rec_mem_camino2(M, L, P, S))
