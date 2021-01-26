@@ -36,10 +36,8 @@ def vallado_solver(L, C, P, M):
 
 		def successors(self):
 			if self.n < len(L):
-
 				for c in range(0, min(C[self.n], self.longitud_local // L[self.n]) + 1):
-					if c <= self.longitud_local:
-						yield ValladoPs(self.ds + (c,), self.longitud_local - (L[self.n] * c))
+					yield ValladoPs(self.ds + (c,), self.longitud_local - (L[self.n] * c))
 
 	initial_ps = ValladoPs((), M)
 	return BacktrackingOptSolver.solve(initial_ps)

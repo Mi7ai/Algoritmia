@@ -9,11 +9,11 @@ def numeros_solver(P, T):
 			return infinity
 
 		if (n, t) not in mem:
-			if n > 0 and t != 0:
+			if n > 0 :
 
-				mem[n, t] = min((L(n - 1, t - abs(d) * P[n - 1]) + abs(d), d) for d in range(-1, 2))
-			else:
-				mem[n, t] = min((L(n - 1, t + d * P[n - 1]) + d, d) for d in range(-1))
+				mem[n, t] = min((L(n - 1, t - d * P[n - 1]) + abs(d), d) for d in range(-1, 2))
+			# else:
+				# mem[n, t] = min((L(n - 1, t + d * P[n - 1]) + d, d) for d in range(-1))
 		return mem[n, t][0]
 
 	mem = {}
