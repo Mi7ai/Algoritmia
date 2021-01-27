@@ -2,5 +2,5 @@
 ## This project involves:
 ### Greedy algorithms
 ### Backtracking algorithms
-### Divede&Decrease and Conquer algorithms
+### Divide&Decrease and Conquer algorithms
 ### Dynamic Programming algorithms
